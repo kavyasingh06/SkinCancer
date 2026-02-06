@@ -167,39 +167,7 @@ if uploaded_file is not None:
                     self.set_text_color(169, 169, 169)
                     self.cell(0, 10, f"Report generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", 0, 0, "C")
 
-            def generate_pdf_report(image, pred_class, confidence, risk_level, tips):
-                pdf = PDF()
-                pdf.add_page()
-                pdf.set_font("Arial", "", 12)
-                pdf.set_text_color(0, 0, 0)
-                pdf.cell(0, 10, f"Prediction Result: {pred_class}", ln=True)
-                pdf.cell(0, 10, f"Confidence Level: {confidence:.2%}", ln=True)
-                pdf.cell(0, 10, f"Risk Level: {risk_level}", ln=True)
-                pdf.ln(10)
-                pdf.multi_cell(0, 8, f"Recommendations:\n{tips}")
-
-                # Save image temporarily
-                temp_img_path = tempfile.NamedTemporaryFile(delete=False, suffix=".png").name
-                image.save(temp_img_path)
-                pdf.ln(10)
-                pdf.image(temp_img_path, x=55, w=100)
-
-                # Save PDF temporarily
-                temp_pdf_path = tempfile.NamedTemporaryFile(delete=False, suffix=".pdf").name
-                pdf.output(temp_pdf_path)
-                return temp_pdf_path
-
-            # Download button
-            st.write("---")
-            if st.button("📄 Generate & Download Report"):
-                pdf_path = generate_pdf_report(img, pred_class, confidence, risk_level, tips)
-                with open(pdf_path, "rb") as f:
-                    st.download_button(
-                        label="💾 Download PDF Report",
-                        data=f.read(),
-                        file_name="Skin_Cancer_Report.pdf",
-                        mime="application/pdf"
-                    )
-
+           
 else:
     st.info("⬆️ Upload a skin lesion image (JPG, JPEG, or PNG) to begin.")
+
