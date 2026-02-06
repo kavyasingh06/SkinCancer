@@ -77,7 +77,6 @@ from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from PIL import Image
-from fpdf import FPDF
 from datetime import datetime
 import tempfile
 import io
@@ -250,3 +249,4 @@ if uploaded_file is not None:
 
 else:
     st.info("⬆️ Upload a skin lesion image (JPG, JPEG, or PNG) to begin.")
+
