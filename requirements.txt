@@ -8,3 +8,4 @@ scikit-learn
 matplotlib
 fpdf
 opencv-python-headless
+gdown
