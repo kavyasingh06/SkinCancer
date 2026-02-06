@@ -1,86 +1,17 @@
-
-''''
 import streamlit as st
 import numpy as np
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.vgg16 import preprocess_input
 from PIL import Image
-
-# ----------------------------
-# App Config
-# ----------------------------
-st.set_page_config(
-    page_title="🩺 Skin Cancer Detection",
-    page_icon="🧬",
-    layout="centered"
-)
-
-st.title("🩺 Skin Cancer Detection")
-st.write("Upload a skin lesion image and the model will predict whether it is **Benign** or **Malignant**.")
-
-# ----------------------------
-# Load model
-# ----------------------------
-MODEL_PATH = "models/skin_cancer_vgg16_finetuned.h5"
-@st.cache_resource
-def load_model_cached():
-    return load_model(MODEL_PATH)
-
-model = load_model_cached()
-
-# ----------------------------
-# File uploader
-# ----------------------------
-uploaded_file = st.file_uploader(
-    "Choose an image...",
-    type=["jpg", "jpeg", "png"]
-)
-
-if uploaded_file is not None:
-    img = Image.open(uploaded_file).resize((128, 128))  # keep 128x128
-    st.image(img, caption="📷 Uploaded Image", use_container_width=True)
-    st.write("")
-
-    if st.button("🔍 Predict"):
-        with st.spinner("Analyzing image..."):
-            img_array = image.img_to_array(img)
-            img_array = np.expand_dims(img_array, axis=0)
-            img_array = preprocess_input(img_array)
-
-            pred_prob = model.predict(img_array)[0][0]
-            pred_class = "Malignant" if pred_prob > 0.5 else "Benign"
-
-            # Confidence score
-            confidence = pred_prob if pred_prob > 0.5 else 1 - pred_prob
-
-            # Color-coded output box
-            if pred_class == "Benign":
-                st.success(f"✅ **Prediction:** Benign ({confidence:.2%} confidence)")
-                st.info("🩹 This lesion appears to be *non-cancerous*. However, professional medical advice is recommended for confirmation.")
-            else:
-                st.error(f"⚠️ **Prediction:** Malignant ({confidence:.2%} confidence)")
-                st.warning("🚨 This lesion shows *malignant characteristics*. Please consult a dermatologist immediately.")
-
-            # Probability bar
-            st.progress(float(confidence))
-
-            # Optional: Display detailed probability
-            st.caption(f"Model probability (Malignant): **{pred_prob:.4f}**")
-
-else:
-    st.info("⬆️ Upload a skin lesion image (JPG, JPEG, or PNG) to begin.")
-'''
-import streamlit as st
-import numpy as np
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.vgg16 import preprocess_input
-from PIL import Image
+from fpdf import FPDF
 from datetime import datetime
 import tempfile
 import io
 import matplotlib.pyplot as plt
+import os
+import gdown
+
 
 # ----------------------------
 # App Config
@@ -97,10 +28,33 @@ st.write("Upload a skin lesion image and the model will predict whether it is **
 # ----------------------------
 # Load model
 # ----------------------------
-MODEL_PATH = "models/skin_cancer_vgg16_finetuned.h5"
+'''MODEL_PATH = "models/skin_cancer_vgg16_finetuned.h5"
 @st.cache_resource
 def load_model_cached():
     return load_model(MODEL_PATH)
+
+model = load_model_cached()'''
+
+# ----------------------------
+# Load model (Download if not exists)
+# ----------------------------
+
+MODEL_PATH = "models/skin_cancer_vgg16_finetuned.h5"
+FILE_ID = "1CpS3h0fchDh1Ah1bWJe7okwtXgNC6edJ"
+
+@st.cache_resource
+def load_model_cached():
+    if not os.path.exists(MODEL_PATH):
+        os.makedirs("models", exist_ok=True)
+        with st.spinner("⬇️ Downloading model (first run only)..."):
+            gdown.download(
+                id=FILE_ID,
+                output=MODEL_PATH,
+                quiet=False
+            )
+    return load_model(MODEL_PATH)
+
+
 
 model = load_model_cached()
 
@@ -249,4 +203,3 @@ if uploaded_file is not None:
 
 else:
     st.info("⬆️ Upload a skin lesion image (JPG, JPEG, or PNG) to begin.")
-
