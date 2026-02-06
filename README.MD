@@ -82,5 +82,29 @@ The model is trained on publicly available datasets (e.g., **ISIC Skin Lesion Da
 
 ### 1️⃣ Clone the repository
 ```bash
-git clone https://github.com/kavyasingh06/skin-cancer-detection.git
-cd skin-cancer-detection
+git clone https://github.com/kavyasingh06/SkinCancer.git
+cd SkinCancer
+## 🧠 Model Details
+
+### Architecture
+- Base Model: **VGG16 (Transfer Learning)**
+- Input Size: **128 × 128 × 3**
+- Classification Type: **Binary (Benign vs Malignant)**
+- Final Activation: **Sigmoid**
+
+### Model Summary
+- **Total Parameters:** 16,812,355  
+- **Trainable Parameters:** 9,177,089  
+- **Non-Trainable Parameters:** 7,635,264  
+
+### Training Configuration
+- Optimizer: Adam  
+- Loss Function: Binary Crossentropy  
+- Regularization: Dropout (0.5)  
+- Fine-tuning: Enabled for top convolutional blocks  
+
+### Dataset Information
+- Dataset Size: **1000 images**
+- Training Accuracy: **92%**
+- Validation Accuracy: **88%**
+
