@@ -1,0 +1,12 @@
+Model: "functional"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #
+=================================================================
+input_layer (InputLayer)     (None, 128, 128, 3)       0
+block1_conv1 (Conv2D)        (None, 128, 128, 64)      1,792
+...
+dense_1 (Dense)              (None, 1)                 257
+=================================================================
+Total params: 16,812,355
+Trainable params: 9,177,089
+Non-trainable params: 7,635,264
